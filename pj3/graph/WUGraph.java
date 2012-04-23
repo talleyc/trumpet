@@ -70,7 +70,7 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-<<<<<<< HEAD
+
 	if (isVertex(vertex))
 	{
 		if (vertexTable.find(vertex) == null) 
@@ -82,13 +82,13 @@ public class WUGraph implements Edge, Vertex{
 			vertextable.insert(vertex, newVx);
 		}
 		else return;
-=======
+
 	if (isVertex(vertex)) {
 		Vertex newvx = new Vertex();
 		newvx.item = vertex;
 		newvx.prev = this;
 		this.next = newvx;	
->>>>>>> fa868955a4c7d6d26affafdb5b65dad84707bfdb
+
 	}
 	else return;
   }
