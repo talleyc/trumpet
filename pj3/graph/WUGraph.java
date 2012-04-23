@@ -9,12 +9,21 @@ package graph;
 
 public class WUGraph {
 
+	HashTableChained vertexTable;
+	HashTableChained edgeTable;
+	Vertex vList;
+	int edgeCount;
+	int vertexCount;
+
+
   /**
    * WUGraph() constructs a graph having no vertices or edges.
    *
    * Running time:  O(1).
    */
-  public WUGraph();
+  public WUGraph(){
+	
+  }
 
   /**
    * vertexCount() returns the number of vertices in the graph.
@@ -51,7 +60,9 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void addVertex(Object vertex);
+  public void addVertex(Object vertex){
+	
+  }
 
   /**
    * removeVertex() removes a vertex from the graph.  All edges incident on the
@@ -108,7 +119,18 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void addEdge(Object u, Object v, int weight);
+  public void addEdge(Object u, Object v, int weight){
+	if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
+		Edge first = new Edge(weight, u, v, this);
+		Edge second = new Edge(weight, v, u, this);
+		first.partner = second;
+		second.partner = first;
+		vertexTable.get(u).edges.insertFront(first);
+		vertexTable.get(v).edges.insertFront(second);
+		edgeTable.put(new VertexPair(vertexTable.get(u), vertexTable.get(v)), first);
+	}
+  
+  }
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
@@ -118,7 +140,15 @@ public class WUGraph {
    *
    * Running time:  O(1).
    */
-  public void removeEdge(Object u, Object v);
+  public void removeEdge(Object u, Object v){
+	if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
+		VertexPair pair = new VertexPair(vertexTable.get(u), vertexTable.get(v));
+		Edge edge = (Edge) edgeTable.get(pair);
+		edgeTable.remove(pair);
+		edge.removeSelf();
+		edge.partner.removeSelf();
+	}
+  }
 
   /**
    * isEdge() returns true if (u, v) is an edge of the graph.  Returns false
