@@ -22,7 +22,11 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public WUGraph(){
-	
+		vertexTable = new HashTableChained(2);
+		edgeTable = new HashTableChained(2);
+		vList = new Vertex();
+		edgeCount = 0;
+		vertexCount = 0;
   }
 
   /**
@@ -30,15 +34,19 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int vertexCount();
-
+  public int vertexCount(){
+		return vertexCount;
+	}
+	
   /**
    * edgeCount() returns the number of edges in the graph.
    *
    * Running time:  O(1).
    */
-  public int edgeCount();
-
+  public int edgeCount(){
+		return edgeCount;
+	}
+	
   /**
    * getVertices() returns an array containing all the objects that serve
    * as vertices of the graph.  The array's length is exactly equal to the
@@ -51,7 +59,8 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(|V|).
    */
-  public Object[] getVertices();
+  public Object[] getVertices(){
+		
 
   /**
    * addVertex() adds a vertex (with no incident edges) to the graph.  The
