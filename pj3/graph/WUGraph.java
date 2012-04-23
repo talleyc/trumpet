@@ -7,7 +7,7 @@ package graph;
  * permitted.
  */
 
-public class WUGraph {
+public class WUGraph implements Edge, Vertex{
 
 	HashTableChained vertexTable;
 	HashTableChained edgeTable;
@@ -70,7 +70,14 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-	
+	if (isVertex(vertex))
+	{
+		Vertex newvx = new Vertex();
+		newvx.item = vertex;
+		newvx.prev = head;
+		this.next = newvx;
+		newvx.degree++;	
+	}
   }
 
   /**
@@ -80,8 +87,17 @@ public class WUGraph {
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public void removeVertex(Object vertex);
-
+  public void removeVertex(Object vertex){
+	if (isVertex(vertex))
+	{
+		Vertex oldvx = vertex;
+		oldvx.next.prev = oldvx.prev;
+		oldvx.prev.next = oldvx.next;
+		oldvx.degree--;
+	}	
+  }
+ 
+ 
   /**
    * isVertex() returns true if the parameter "vertex" represents a vertex of
    * the graph.
@@ -98,7 +114,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public int degree(Object vertex);
-
+		
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
    * Neighbors.neighborList array contains each object that is connected to the
