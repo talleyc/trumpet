@@ -60,6 +60,7 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(|V|).
    */
   public Object[] getVertices(){
+		Vertex currVx = vList;
 		
 
   /**
@@ -70,8 +71,7 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
-	if (isVertex(vertex))
-	{
+	if (isVertex(vertex)) {
 		Vertex newvx = new Vertex();
 		newvx.item = vertex;
 		newvx.prev = this;
