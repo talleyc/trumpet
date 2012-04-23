@@ -74,9 +74,8 @@ public class WUGraph implements Edge, Vertex{
 	{
 		Vertex newvx = new Vertex();
 		newvx.item = vertex;
-		newvx.prev = head;
-		this.next = newvx;
-		newvx.degree++;	
+		newvx.prev = this;
+		this.next = newvx;	
 	}
   }
 
@@ -93,7 +92,6 @@ public class WUGraph implements Edge, Vertex{
 		Vertex oldvx = vertex;
 		oldvx.next.prev = oldvx.prev;
 		oldvx.prev.next = oldvx.next;
-		oldvx.degree--;
 	}	
   }
  
@@ -153,6 +151,8 @@ public class WUGraph implements Edge, Vertex{
 		vertexTable.get(u).edges.insertFront(first);
 		vertexTable.get(v).edges.insertFront(second);
 		edgeTable.put(new VertexPair(vertexTable.get(u), vertexTable.get(v)), first);
+		v.degree++;
+		u.degree++;
 	}
   
   }
@@ -172,6 +172,8 @@ public class WUGraph implements Edge, Vertex{
 		edgeTable.remove(pair);
 		edge.removeSelf();
 		edge.partner.removeSelf();
+		u.degree--;
+		v.degree--;
 	}
   }
 
