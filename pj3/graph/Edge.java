@@ -2,10 +2,12 @@ package graph;
 
 public class Edge{
 	private int weight;
-	private VertexPair vertices;
-	package Edge partner;
-	WUGraph graph;
-
+	private VertexPair vertices; //NULL for sentinal node
+	private Edge next;
+	private Edge prev;
+	private WUGraph graph;
+	protected Edge partner;
+	
 	/**Makes a new edge, with a null partner reference.
 	  * @param w the weight of this edge
 	  * @param a one of the objects being connected
@@ -32,5 +34,4 @@ public class Edge{
 	public Edge partner(){
 		return partner;
 	}
-
 }
