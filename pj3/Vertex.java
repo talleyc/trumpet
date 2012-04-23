@@ -1,5 +1,4 @@
 package graph;
-import list.*;
 
 public class Vertex extends Object{
         
@@ -19,27 +18,27 @@ public class Vertex extends Object{
         }
        
 		 //Return the current vertex
-        public Object GetVertex() {
+        public Object getVertex() {
                 return item;  
         }
 	
         //Return the next vertex
-        public Vertex NextVertex() {
+        public Vertex nextVertex() {
                 return next;
         }
         
         //Return the previous vertex
-        public Vertex PrevVertex() {
+        public Vertex prevVertex() {
                 return prev;
         }    
         
 		//Return the degree
-		public int GetDegree() {
+		public int getDegree() {
 				return degree;
 		}
 		
 		//Return the list of edges
-		public Edge GetEdges() {
+		public Edge getEdges() {
 				return edges;
 		}
 		

@@ -8,6 +8,11 @@ public class Edge{
 	private WUGraph graph;
 	protected Edge partner;
 	
+	// Chris! You need to make a no argument constructor for the sentinal. Also, my code for 
+	// getNeighbors requires that your vertices (VertexPair) has the first vertex as itself and 
+	// the second vertex as the partner. That way, I can always access the neighboring vertices
+	// by calling VertexPair.object2.
+	
 	/**Makes a new edge, with a null partner reference.
 	  * @param w the weight of this edge
 	  * @param a one of the objects being connected
@@ -23,15 +28,15 @@ public class Edge{
 		}
 	}
 	
-	public int weight(){
+	public int getWeight(){
 		return weight;
 	}
 	
-	public VertexPair vertices(){
+	public VertexPair getVertices(){
 		return vertices;
 	}
 	
-	public Edge partner(){
+	public Edge getPartner(){
 		return partner;
 	}
 }

@@ -1,6 +1,8 @@
 /* WUGraph.java */
 
 package graph;
+import dict.*;
+
 
 /**
  * The WUGraph class represents a weighted, undirected graph.  Self-edges are
@@ -60,9 +62,15 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(|V|).
    */
   public Object[] getVertices(){
-		Vertex currVx = vList;
-		
-
+		Object[] vxList = new Object[vertexCount];
+		Vertex currVx = vList.next;
+		for (int i = 0; i < vertexCount; i++) {
+			Object[i] = currVx.item;
+			currVx = currVx.next;
+		}
+		return vxList;
+	}
+	
   /**
    * addVertex() adds a vertex (with no incident edges) to the graph.  The
    * vertex's "name" is the object provided as the parameter "vertex".
@@ -102,7 +110,9 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public boolean isVertex(Object vertex);
+  public boolean isVertex(Object vertex){
+		return vertexTable.find(vertex);
+	}
 
   /**
    * degree() returns the degree of a vertex.  Self-edges add only one to the
@@ -111,8 +121,15 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int degree(Object vertex);
-		
+  public int degree(Object vertex){
+		Entry vxEntry = vertexTable.find(vertex);
+		if (vxEntry == null || this.isVertex(vertex) != true) {
+			return 0;
+		} else {
+			return vxEntry.value.GetDegree();
+		}
+	}
+	
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
    * Neighbors.neighborList array contains each object that is connected to the
@@ -131,7 +148,19 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public Neighbors getNeighbors(Object vertex);
+  public Neighbors getNeighbors(Object vertex){
+		Neighbors res;
+		res.neigborList = new Object[degree];
+		res.weightList = new int[degree];
+		Vertex vxEntry = vertexTable.find(vertex).value;
+		Edge currEdge = vxEntry.getEdges().next;
+		for (int i = 0; i < vxEntry.getDegree(); i++) {
+			res.neighborList[i] = getVertices().object2;
+			res.weightList[i] = getWeight();
+			currEdge = currEdge.next;
+		}
+		return res;
+	}
 
   /**
    * addEdge() adds an edge (u, v) to the graph.  If either of the parameters
@@ -184,7 +213,10 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public boolean isEdge(Object u, Object v);
+  public boolean isEdge(Object u, Object v){
+		VertexPair edge = new VertexPair(u, v);
+		return edgeTable.find(edge);
+	}
 
   /**
    * weight() returns the weight of (u, v).  Returns zero if (u, v) is not
@@ -200,6 +232,14 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int weight(Object u, Object v);
+  public int weight(Object u, Object v){
+		VertexPair edge = new VertexPair(u, v);
+		Entry edgeEntry = edgeTable.find(edge);
+		if (edgeEntry == null || this.isVertex(u) != true || this.isVertex(v) != true) {
+			return 0;
+		} else {
+			return edgeEntry.value.weight();
+		}
+	}
 
 }
