@@ -15,7 +15,6 @@ public class WUGraph implements Edge, Vertex{
 	int edgeCount;
 	int vertexCount;
 
-
   /**
    * WUGraph() constructs a graph having no vertices or edges.
    *
@@ -71,12 +70,27 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
+
+	if (isVertex(vertex))
+	{
+		if (vertexTable.find(vertex) == null) 
+		{
+			Vertex newVx = new Vertex();
+			newVx.item = vertex;
+			newVx.prev = this;
+			this.next = newVx;
+			vertextable.insert(vertex, newVx);
+		}
+		else return;
+
 	if (isVertex(vertex)) {
 		Vertex newvx = new Vertex();
 		newvx.item = vertex;
 		newvx.prev = this;
 		this.next = newvx;	
+
 	}
+	else return;
   }
 
   /**
@@ -89,10 +103,16 @@ public class WUGraph implements Edge, Vertex{
   public void removeVertex(Object vertex){
 	if (isVertex(vertex))
 	{
-		Vertex oldvx = vertex;
-		oldvx.next.prev = oldvx.prev;
-		oldvx.prev.next = oldvx.next;
-	}	
+		if (vertexTable.find(vertex) != null) 
+		{
+			Vertex oldVx = vertex;
+			oldVx.next.prev = oldVx.prev;
+			oldVx.prev.next = oldVx.next;
+			vertextable.remove(vertex);
+		}
+		else return;
+	}
+	else return;
   }
  
  
@@ -111,8 +131,9 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int degree(Object vertex);
-		
+  public int degree(Object vertex) {
+			return vertex.degree;
+	}	
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
    * Neighbors.neighborList array contains each object that is connected to the
