@@ -1,6 +1,6 @@
 /* DList.java */
 
-package list;
+package dict;
 
 /**
  *  A DList is a mutable doubly-linked list ADT.  Its implementation is
@@ -117,6 +117,10 @@ public class DList extends List {
    */
   public ListNode back() {
     return head.prev;
+  }
+  
+  public DListNode head(){
+	return head;
   }
 
   /**

@@ -43,5 +43,10 @@ public class Vertex extends Object{
 				return edges;
 		}
 		
+		//Return the 
+		public Object GetItem(){
+			return item;
+		}
+		
 
 }

@@ -1,6 +1,6 @@
 /* InvalidNodeException.java */
 
-package list;
+package dict;
 
 /**
  *  Implements an Exception that signals an attempt to use an invalid ListNode.
