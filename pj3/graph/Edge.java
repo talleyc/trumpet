@@ -3,9 +3,8 @@ package graph;
 public class Edge{
 	private int weight;
 	private VertexPair vertices; //NULL for sentinal node
-	private Edge next;
-	private Edge prev;
-	private WUGraph graph;
+	protected Edge next;
+	protected Edge prev;
 	protected Edge partner;
 	
 	// Chris! You need to make a no argument constructor for the sentinal. Also, my code for 
@@ -19,24 +18,44 @@ public class Edge{
 	  * @param b the other object being connected
 	  * @param parentGraph the graph which contains this edge and these objects
 	 */
-	public Edge(int w, Object a, Object b, WUGraph parentGraph){
-		if(!parentGraph.isEdge(a, b)){
+	public Edge(int w, Vertex a, Vertex b){
+		if(!parentGraph.isEdge(a.getItem(), b.getItem())){
 			weight = w;
-			vertices = new VertexPair(a, b);
+			vertices = new VertexPair(a.getItem(), b.getItem());
 			partner = null;
-			graph = parentGraph;
 		}
 	}
 	
+<<<<<<< HEAD
 	public int getWeight(){
 		return weight;
 	}
 	
 	public VertexPair getVertices(){
+=======
+	public Edge(){
+		vertices = null;
+		next = null;
+		prev = null;
+		partner = null;
+		weight = 0;
+	}
+	
+	public int weight(){
+		return weight;
+	}
+	
+	public vertexPair vertices(){
+>>>>>>> 0400c02ca1277a5134550bfc9d691d0ba0401aee
 		return vertices;
 	}
 	
 	public Edge getPartner(){
 		return partner;
+	}
+	
+	public removeSelf(){
+		next.prev = prev;
+		prev.next = next;
 	}
 }

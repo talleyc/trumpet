@@ -8,7 +8,7 @@ public class Vertex extends Object{
 		private Vertex next;
 		protected int degree;
 		private Edge edges;
-        
+		
         //Empty constructor for a Vertex
         public Vertex() {
                 item = null;
@@ -41,6 +41,11 @@ public class Vertex extends Object{
 		//Return the list of edges
 		public Edge getEdges() {
 				return edges;
+		}
+		
+		//Return the 
+		public Object GetItem(){
+			return item;
 		}
 		
 

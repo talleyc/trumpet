@@ -1,6 +1,6 @@
 /* DListNode.java */
 
-package list;
+package dict;
 
 /**
  *  A DListNode is a mutable node in a DList (doubly-linked list).
@@ -37,6 +37,10 @@ public class DListNode extends ListNode {
   public DListNode(Object item, DListNode prev2, DListNode next2) {
 	// TODO Auto-generated constructor stub
 }
+
+	public Object item(){
+		return item;
+	}
 
 /**
    *  isValidNode returns true if this node is valid; false otherwise.

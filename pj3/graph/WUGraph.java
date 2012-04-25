@@ -219,7 +219,7 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public void removeEdge(Object u, Object v){
-	if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
+	if(isVertex(u) && isVertex(v) && isEdge(u, v)){
 		VertexPair pair = new VertexPair(vertexTable.get(u), vertexTable.get(v));
 		Edge edge = (Edge) edgeTable.get(pair);
 		edgeTable.remove(pair);

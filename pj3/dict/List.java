@@ -1,6 +1,6 @@
 /* List.java */
 
-package list;
+package dict;
 
 /**
  *  A List is a mutable list ADT.  No implementation is provided.

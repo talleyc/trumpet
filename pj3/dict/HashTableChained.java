@@ -2,9 +2,7 @@
 
 package dict;
 
-import list.DList;
-import list.InvalidNodeException;
-import list.ListNode;
+
 
 /**
  *  HashTableChained implements a Dictionary as a hash table with chaining.
@@ -133,6 +131,31 @@ public class HashTableChained implements Dictionary {
 		if (key == null) {
 			return null;
 		}
+		ListNode traverser = null;
+		try{
+			if(size >= buckets){
+				buckets *=2;
+				while(!isPrime(buckets)){
+					buckets++;
+				}
+				DList[] oldList = table;
+				table = new DList[buckets];
+				initBuckets();
+				for(int i=0; i<oldList.length; i++){
+					if(oldList[i]!=null){
+						traverser = oldList[i].front();
+						while(traverser != oldList[i].head()){
+							Entry entry = (Entry)traverser.item();
+							int bucket = compFunction(entry.key().hashCode());
+							table[bucket].insertFront(entry);
+							traverser = traverser.next();
+						}
+					}
+				}
+			}
+		} catch(InvalidNodeException e) {
+			System.err.println(e);
+		}
 		int bucket = compFunction(key.hashCode());
 		Entry entry = new Entry();
 		entry.key = key;
@@ -186,6 +209,34 @@ public class HashTableChained implements Dictionary {
 	public Entry remove(Object key) {
 		int bucket = compFunction(key.hashCode());
 		ListNode node = table[bucket].front();
+		ListNode traverser = null;
+		try{
+			if(size <= buckets/4){
+				buckets /= 2;
+				while(!isPrime(buckets)){
+					buckets++;
+				}
+				DList[] oldList = table;
+				table = new DList[buckets];
+				initBuckets();
+				for(int i=0; i<oldList.length; i++){
+					if(oldList[i]!=null){
+						traverser = oldList[i].front();
+						while(traverser != oldList[i].head()){
+							if(!((Entry)(traverser.item())).key().equals(key)){
+								Entry entry = (Entry)traverser.item();
+								int Bucket = compFunction(entry.key().hashCode());
+								table[Bucket].insertFront(entry);
+							}
+							
+							traverser = traverser.next();
+						}
+					}
+				}
+			}
+		} catch(InvalidNodeException e) {
+			System.err.println(e);
+		}
 		while (node.isValidNode()) {
 			try {
 				Entry entry = (Entry) node.item();
@@ -209,4 +260,12 @@ public class HashTableChained implements Dictionary {
 		initBuckets();
 	}
 
+	public int buckets(){
+		return buckets;
+	}
+	
+	public int tableLen(){
+		return table.length;
+	}
+	
 }
