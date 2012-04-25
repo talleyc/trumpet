@@ -31,7 +31,7 @@ public class Edge{
 	}
 	
 	public void insertFront(Edge a){
-		if(vertices == null) {
+		if(a!=null){
 			Edge temp = next;
 			next = a;
 			a.next = temp;
@@ -60,9 +60,11 @@ public class Edge{
 	}
 	
 	public void removeSelf(){
-		next.prev = prev;
-		prev.next = next;
-		prev = null;
-		next = null;
+		if(prev != null){
+			prev.next = next;
+			next.prev = prev;
+			prev = null;
+			next = null;
+		}
 	}
 }

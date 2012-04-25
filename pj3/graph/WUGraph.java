@@ -101,6 +101,7 @@ public class WUGraph {
 		if (isVertex(vertex)) {
 			Vertex oldVx = (Vertex)vertexTable.find(vertex).value();
 			Edge currEdge = oldVx.edges().next;
+			Edge firstEdge = currEdge.next;
 			oldVx.prev.next = oldVx.next;
 			oldVx.next.prev = oldVx.prev;
 			oldVx.next = null;
@@ -113,6 +114,8 @@ public class WUGraph {
 				edgeTable.remove(currEdge.vertices);
 				edgeCount--;
 				((Vertex)(vertexTable.find(currEdge.vertices.object2).value())).degree--;
+				currEdge = firstEdge;
+				firstEdge = firstEdge.next;
 			}
 			vertexTable.remove(vertex);
 			vertexCount--;
@@ -138,6 +141,9 @@ public class WUGraph {
    */
 
   public int degree(Object vertex){
+		if(!isVertex(vertex)){
+			return 0;
+		}
 		Vertex vxEntry = (Vertex)vertexTable.find(vertex).value();
 		if (vxEntry == null || this.isVertex(vertex) != true) {
 			return 0;
@@ -211,8 +217,6 @@ public class WUGraph {
 		edgeTable.insert(new VertexPair(u, v), first);
 		((Vertex)vertexTable.find(v).value()).degree++;
 		edgeCount++;
-	
-	
 	}else if (isEdge(u,v)){
 		Edge g = (Edge)edgeTable.find(new VertexPair(u,v)).value();
 		g.weight = weight;
@@ -222,7 +226,7 @@ public class WUGraph {
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
-   * parameters u and v does not represent a vertex of the graph, the graph
+   * parameters u and v does not represent a vertex of the graph, the graph partner
    * is unchanged.  If (u, v) is not an edge of the graph, the graph is
    * unchanged.
    *
