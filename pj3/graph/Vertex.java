@@ -6,9 +6,9 @@ public class Vertex extends Object{
         private Object item;
 		private Vertex prev;
 		private Vertex next;
-		private int degree;
+		protected int degree;
 		private Edge edges;
-        
+		
         //Empty constructor for a Vertex
         public Vertex() {
                 item = null;
