@@ -86,6 +86,7 @@ public class WUGraph implements Edge, Vertex{
 			newVx.next = vList;
 			vList.prev = newVx;
 			vertextable.insert(vertex, newVx);
+			vertexCount++;
 		} 
 	}
 
@@ -106,8 +107,11 @@ public class WUGraph implements Edge, Vertex{
 			oldVx.prev = null;
 			while (currEdge.vertices() != null) {
 				currEdge.getPartner().removeSelf();
-	  }
- 
+				((Vertex)vertexTable.find(currEdge.vertices.object2)).degree--;
+			}
+			vertexCount--;
+		}
+	}
  
   /**
    * isVertex() returns true if the parameter "vertex" represents a vertex of
@@ -162,11 +166,8 @@ public class WUGraph implements Edge, Vertex{
 		Edge currEdge = vxEntry.getEdges().next;
 		for (int i = 0; i < vxEntry.getDegree(); i++) {
 			res.neighborList[i] = currEdge.vertices().object2;
-<<<<<<< HEAD
 			res.weightList[i] = getWeight();
-=======
 			res.weightList[i] = currEdge.weight();
->>>>>>> 473cfca366021e8e17e9fb744d7fba1ec7c43a5a
 			currEdge = currEdge.next;
 		}
 		return res;
@@ -183,17 +184,20 @@ public class WUGraph implements Edge, Vertex{
    */
   public void addEdge(Object u, Object v, int weight){
 	if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
-		Edge first = new Edge(weight, u, v, this);
-		Edge second = new Edge(weight, v, u, this);
+		Edge first = new Edge(weight, u, v);
+		Edge second = new Edge(weight, v, u);
 		first.partner = second;
 		second.partner = first;
 		vertexTable.get(u).edges.insertFront(first);
 		vertexTable.get(v).edges.insertFront(second);
-		edgeTable.put(new VertexPair(vertexTable.get(u), vertexTable.get(v)), first);
+		edgeTable.insert(new VertexPair(u, v), first);
 		v.degree++;
 		u.degree++;
+	} else if (isEdge(u,v)){
+		Vertex v = vertexTable.get(new VertexPair(u,v));
+		v.weight = weight;
+		v.partner.weight = weight;
 	}
-  
   }
 
   /**

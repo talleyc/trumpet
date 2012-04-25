@@ -18,15 +18,13 @@ public class Edge{
 	  * @param b the other object being connected
 	  * @param parentGraph the graph which contains this edge and these objects
 	 */
-	public Edge(int w, Vertex a, Vertex b){
+	public Edge(int w, Object a, Object b){
+		weight = w;
+		vertices = new VertexPair(a, b);
+		partner = null;
 		weight = w;
 		vertices = new VertexPair(a.getItem(), b.getItem());
 		partner = null;
-		if(!parentGraph.isEdge(a.getItem(), b.getItem())){
-			weight = w;
-			vertices = new VertexPair(a.getItem(), b.getItem());
-			partner = null;
-		}
 	}
 	
 	public int weight(){
