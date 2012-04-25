@@ -26,13 +26,10 @@ public class Edge{
 		}
 	}
 	
-<<<<<<< HEAD
-	public int getWeight(){
+	public int weight(){
 		return weight;
 	}
 	
-	public VertexPair getVertices(){
-=======
 	public Edge(){
 		vertices = null;
 		next = null;
@@ -46,11 +43,10 @@ public class Edge{
 	}
 	
 	public vertexPair vertices(){
->>>>>>> 0400c02ca1277a5134550bfc9d691d0ba0401aee
 		return vertices;
 	}
 	
-	public Edge getPartner(){
+	public Edge partner(){
 		return partner;
 	}
 	
