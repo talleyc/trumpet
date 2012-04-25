@@ -22,7 +22,7 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public WUGraph(){
+	public WUGraph(){
 		vertexTable = new HashTableChained(2);
 		edgeTable = new HashTableChained(2);
 		vList = new Vertex();
@@ -35,7 +35,7 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int vertexCount(){
+	public int vertexCount(){
 		return vertexCount;
 	}
 	
@@ -44,7 +44,7 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public int edgeCount(){
+	public int edgeCount(){
 		return edgeCount;
 	}
 	
@@ -77,27 +77,17 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
-  public void addVertex(Object vertex){
+	public void addVertex(Object vertex){
 		if (!isVertex(vertex)) {
 			Vertex newVx = new Vertex();
 			newVx.item = vertex;
-			newVx.prev = vList.prev;
+			newVx.prev = vList.prevVertex();
 			vList.prev.next = newVx;
 			newVx.next = vList;
 			vList.prev = newVx;
 			vertextable.insert(vertex, newVx);
-		}
-		else return;
-
-	if (isVertex(vertex)) {
-		Vertex newvx = new Vertex();
-		newvx.item = vertex;
-		newvx.prev = this;
-		this.next = newvx;	
-
+		} 
 	}
-	else return;
-  }
 
   /**
    * removeVertex() removes a vertex from the graph.  All edges incident on the
@@ -106,20 +96,17 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(d), where d is the degree of "vertex".
    */
-  public void removeVertex(Object vertex){
-	if (isVertex(vertex))
-	{
-		if (vertexTable.find(vertex) != null) 
-		{
-			Vertex oldVx = vertex;
-			oldVx.next.prev = oldVx.prev;
-			oldVx.prev.next = oldVx.next;
-			vertextable.remove(vertex);
-		}
-		else return;
-	}
-	else return;
-  }
+	public void removeVertex(Object vertex){
+		Vertex oldVx = vertexTable.find(vertex).value;
+		Edge currEdge = oldVx.getEdges().next;
+		if (isVertex(vertex)) {
+			oldVx.prev.next = oldVx.nextVertex();
+			oldVx.next.prev = oldVs.prevVertex();
+			oldVx.next = null;
+			oldVx.prev = null;
+			while (currEdge.vertices() != null) {
+				currEdge.getPartner().removeSelf();
+	  }
  
  
   /**
@@ -148,11 +135,6 @@ public class WUGraph implements Edge, Vertex{
 			return vxEntry.value.GetDegree();
 		}
 	}
-	
-
-  public int degree(Object vertex) {
-			return vertex.degree;
-	}	
 
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
@@ -180,7 +162,11 @@ public class WUGraph implements Edge, Vertex{
 		Edge currEdge = vxEntry.getEdges().next;
 		for (int i = 0; i < vxEntry.getDegree(); i++) {
 			res.neighborList[i] = currEdge.vertices().object2;
+<<<<<<< HEAD
 			res.weightList[i] = getWeight();
+=======
+			res.weightList[i] = currEdge.weight();
+>>>>>>> 473cfca366021e8e17e9fb744d7fba1ec7c43a5a
 			currEdge = currEdge.next;
 		}
 		return res;

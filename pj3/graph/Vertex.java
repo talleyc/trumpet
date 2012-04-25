@@ -4,10 +4,10 @@ import list.*;
 public class Vertex extends Object{
         
         protected Object item;
-		private Vertex prev;
-		private Vertex next;
+		protected Vertex prev;
+		protected Vertex next;
 		protected int degree;
-		private Edge edges;
+		protected Edge edges;
 		
         //Empty constructor for a Vertex
         public Vertex() {
@@ -19,32 +19,32 @@ public class Vertex extends Object{
         }
        
 		 //Return the current vertex
-        public Object getVertex() {
+        public Object vertex() {
                 return item;  
         }
 	
         //Return the next vertex
-        public Vertex nextVertex() {
+        public Vertex next() {
                 return next;
         }
         
         //Return the previous vertex
-        public Vertex prevVertex() {
+        public Vertex prev() {
                 return prev;
         }    
         
 		//Return the degree
-		public int getDegree() {
+		public int degree() {
 				return degree;
 		}
 		
 		//Return the list of edges
-		public Edge getEdges() {
+		public Edge edges() {
 				return edges;
 		}
 		
 		//Return the 
-		public Object GetItem(){
+		public Object item(){
 			return item;
 		}
 		
