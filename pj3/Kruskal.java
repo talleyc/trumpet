@@ -18,44 +18,21 @@ public class Kruskal {
    */
   public static WUGraph minSpanTree(WUGraph g){
 	WUGraph temp = new WUGraph();	//the purpose of the temp graph is to count all edges
-	Edge[] edges = new Edge[g.edgeCount()];
-	Neighbors neighbors;
+	WUGraph ans = new WUGraph();
+
 	Object[] vertices = g.getVertices();
 	Object[] object1Arr = new Object[g.edgeCount()];
 	Object[] object2Arr= new Object[g.edgeCount()];
 	int[] weightArr = new int[g.edgeCount()];
 	HashTableChained vertexTable = new HashTableChained();
-	WUGraph ans = new WUGraph();
 	int count = 0;
 	
-	//put all vertices in the ans and temp graphs
-	for(int i=0; i<vertices.length; i++){
-		ans.addVertex(vertices[i]);
-		vertexTable.insert(vertices[i], new Integer(i));
-		temp.addVertex(vertices[i]);
-	}
-	
-	//Acquire an array of all edges
-	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying Integer value
-		neighbors = g.getNeighbors(vertices[i]);
-		for(int j=0; j<neighbors.neighborList.length; j++){
-			if(!temp.isEdge(vertices[i], neighbors.neighborList[j])){
-				temp.addEdge(vertices[i], neighbors.neighborList[j], neighbors.weightList[j]);
-				//edges[count] = new Edge( neighbors.weightList[j], neighbors.neighborList[j], vertices[i]);
-				object2Arr[count] = neighbors.neighborList[j];
-				object1Arr[count] = vertices[i];
-				weightArr[count] = neighbors.weightList[j];
-				count++;
-			}
-		}
-	}
-
-	//apply Kruskal's algorithm
+	//populate the arrays with fields of all edges in g, and the ans graph with all vertices in g
+	populateArrays(object1Arr, object2Arr, weightArr, vertices, ans, g, vertexTable);
 	count = 0;
-	//quicksort(edges);
 	quicksort(weightArr, object1Arr, object2Arr);
 	DisjointSets ds = new DisjointSets(vertices.length);//vertex in vertexTable which maps to i corresponds to element i of ds
-	while(ans.edgeCount() < vertices.length-1 && ans.edgeCount() < edges.length ){
+	while(ans.edgeCount() < vertices.length-1 && ans.edgeCount() < g.edgeCount() ){
 		int locA = locationOf(object1Arr[count],vertexTable);
 		int locB = locationOf(object2Arr[count],vertexTable);
 		if(ds.find(locA) != ds.find(locB)){
@@ -78,7 +55,45 @@ public class Kruskal {
   public static int locationOf(Object key, HashTableChained table){
 	return ((Integer)table.find(key).value()).intValue();
   }
- 
+  
+  /**
+   * populateArrays() will fill object1Arr, object2Arr, and weightArr with the appropriate
+   * fields in each edge. For example, weightArr[x] is the weight of the edge which connects
+   * object1Arr[x] and object2Arr[x]. This way, we can represent an edge without having to access
+   * the actual edge class, which would violate encapsultion. Also, WUGraph ans is filled with all
+   * vertices from g.
+   * @param object1Arr will be populated with the first object stored in each edge in g
+   * @param object2Arr will be populated with the second object stored in each edge in g
+   * @param weightArr will be populated with the weight of each edge in g
+   * @param vertices an already-filled array of all vertices in the graph
+   * @param ans the graph that will eventually be the minimum spanning tree
+   * @param g the graph whose minimum spanning tree is being sought
+   * @param vertexTable a hash table containing all vertices in the graph as keys, each with a unique integer value
+   * @return the index of the disjoint sets data structure that corresponds to @param key
+   */
+  public static void populateArrays(Object[] object1Arr, Object[] object2Arr, int[] weightArr, Object[] vertices, WUGraph ans, WUGraph g, HashTableChained vertexTable){
+	Neighbors neighbors;
+	int count = 0;
+	WUGraph temp = new WUGraph();
+	for(int i=0; i<vertices.length; i++){
+		ans.addVertex(vertices[i]);
+		vertexTable.insert(vertices[i], new Integer(i));
+		temp.addVertex(vertices[i]);
+	}
+	
+	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying Integer value
+		neighbors = g.getNeighbors(vertices[i]);
+		for(int j=0; j<neighbors.neighborList.length; j++){
+			if(!temp.isEdge(vertices[i], neighbors.neighborList[j])){
+				temp.addEdge(vertices[i], neighbors.neighborList[j], neighbors.weightList[j]);
+				object2Arr[count] = neighbors.neighborList[j];
+				object1Arr[count] = vertices[i];
+				weightArr[count] = neighbors.weightList[j];
+				count++;
+			}
+		}
+	}
+ }
   
   /**
    *  Quicksort algorithm.
