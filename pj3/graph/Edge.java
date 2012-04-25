@@ -1,8 +1,8 @@
 package graph;
 
 public class Edge{
-	private int weight;
-	private VertexPair vertices; //NULL for sentinal node
+	protected int weight;
+	protected VertexPair vertices; //NULL for sentinal node
 	protected Edge next;
 	protected Edge prev;
 	protected Edge partner;
@@ -22,30 +22,36 @@ public class Edge{
 		weight = w;
 		vertices = new VertexPair(a, b);
 		partner = null;
-		weight = w;
-		vertices = new VertexPair(a.getItem(), b.getItem());
-		partner = null;
+		next = this;
+		prev = this;
 	}
 	
 	public int weight(){
 		return weight;
 	}
 	
+	public void insertFront(Edge a){
+		if(vertices == null) {
+			Edge temp = next;
+			next = a;
+			a.next = temp;
+			temp.prev = a;
+			a.prev = this;
+		}
+	}
+	
 	public Edge(){
 		vertices = null;
-		next = null;
-		prev = null;
+		next = this;
+		prev = this;
 		partner = null;
 		weight = 0;
 	}
 	
-	public int getWeight(){
-		return weight;
-	}
-		
-	public vertexPair getVertices(){
 	
-	public vertexPair vertices(){
+		
+	
+	public VertexPair vertices(){
 		return vertices;
 	}
 	
@@ -53,7 +59,7 @@ public class Edge{
 		return partner;
 	}
 	
-	public removeSelf(){
+	public void removeSelf(){
 		next.prev = prev;
 		prev.next = next;
 		prev = null;

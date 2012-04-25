@@ -1,5 +1,4 @@
 package graph;
-import list.*;
 
 public class Vertex extends Object{
         

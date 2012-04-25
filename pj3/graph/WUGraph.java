@@ -9,7 +9,7 @@ import dict.*;
  * permitted.
  */
 
-public class WUGraph implements Edge, Vertex{
+public class WUGraph {
 
 	protected HashTableChained vertexTable;
 	protected HashTableChained edgeTable;
@@ -62,10 +62,10 @@ public class WUGraph implements Edge, Vertex{
    */
   public Object[] getVertices(){
 		Object[] vxList = new Object[vertexCount];
-		Vertex currVx = vList.nextVertex();
+		Vertex currVx = vList.next;
 		for (int i = 0; i < vertexCount; i++) {
-			Object[i] = currVx.getVertex();
-			currVx = currVx.nextVertex();
+			vxList[i] = currVx.vertex();
+			currVx = currVx.next;
 		}
 		return vxList;
 	}
@@ -81,11 +81,11 @@ public class WUGraph implements Edge, Vertex{
 		if (!isVertex(vertex)) {
 			Vertex newVx = new Vertex();
 			newVx.item = vertex;
-			newVx.prev = vList.prevVertex();
+			newVx.prev = vList.prev;
 			vList.prev.next = newVx;
 			newVx.next = vList;
 			vList.prev = newVx;
-			vertextable.insert(vertex, newVx);
+			vertexTable.insert(vertex, newVx);
 			vertexCount++;
 		} 
 	}
@@ -98,17 +98,18 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(d), where d is the degree of "vertex".
    */
 	public void removeVertex(Object vertex){
-		Vertex oldVx = vertexTable.find(vertex).value;
-		Edge currEdge = oldVx.getEdges().next;
 		if (isVertex(vertex)) {
-			oldVx.prev.next = oldVx.nextVertex();
-			oldVx.next.prev = oldVs.prevVertex();
+			Vertex oldVx = (Vertex)vertexTable.find(vertex).value();
+			Edge currEdge = oldVx.edges().next;
+			oldVx.prev.next = oldVx.next;
+			oldVx.next.prev = oldVx.prev;
 			oldVx.next = null;
 			oldVx.prev = null;
 			while (currEdge.vertices() != null) {
-				currEdge.getPartner().removeSelf();
-				((Vertex)vertexTable.find(currEdge.vertices.object2)).degree--;
+				currEdge.partner().removeSelf();
+				((Vertex)(vertexTable.find(currEdge.vertices.object2).value())).degree--;
 			}
+			vertexTable.remove(vertex);
 			vertexCount--;
 		}
 	}
@@ -120,7 +121,7 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public boolean isVertex(Object vertex){
-		return vertexTable.find(vertex);
+		return vertexTable.find(vertex)!=null;
 	}
 
   /**
@@ -132,11 +133,11 @@ public class WUGraph implements Edge, Vertex{
    */
 
   public int degree(Object vertex){
-		Entry vxEntry = vertexTable.find(vertex);
+		Vertex vxEntry = (Vertex)vertexTable.find(vertex).value();
 		if (vxEntry == null || this.isVertex(vertex) != true) {
 			return 0;
 		} else {
-			return vxEntry.value.GetDegree();
+			return vxEntry.degree();
 		}
 	}
 
@@ -159,16 +160,18 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(d), where d is the degree of "vertex".
    */
   public Neighbors getNeighbors(Object vertex){
-		Neighbors res;
-		res.neigborList = new Object[degree];
-		res.weightList = new int[degree];
-		Vertex vxEntry = vertexTable.find(vertex).value;
-		Edge currEdge = vxEntry.getEdges().next;
-		for (int i = 0; i < vxEntry.getDegree(); i++) {
+		Neighbors res = new Neighbors();
+		Vertex vxEntry = (Vertex)vertexTable.find(vertex).value();
+		res.neighborList = new Object[vxEntry.degree()];
+		res.weightList = new int[vxEntry.degree()];
+		Edge currEdge = vxEntry.edges().next;
+		for (int i = 0; i < vxEntry.degree(); i++) {
 			res.neighborList[i] = currEdge.vertices().object2;
-			res.weightList[i] = getWeight();
 			res.weightList[i] = currEdge.weight();
 			currEdge = currEdge.next;
+		}
+		if(res.neighborList.length==0){
+			return null;
 		}
 		return res;
 	}
@@ -188,15 +191,18 @@ public class WUGraph implements Edge, Vertex{
 		Edge second = new Edge(weight, v, u);
 		first.partner = second;
 		second.partner = first;
-		vertexTable.get(u).edges.insertFront(first);
-		vertexTable.get(v).edges.insertFront(second);
+		((Vertex) vertexTable.find(u).value()).edges().insertFront(first);
+		((Vertex) vertexTable.find(v).value()).edges().insertFront(second);
 		edgeTable.insert(new VertexPair(u, v), first);
-		v.degree++;
-		u.degree++;
+		((Vertex)vertexTable.find(v).value()).degree++;
+		if(vertexTable.find(v).value() != vertexTable.find(u).value()) {
+			((Vertex)vertexTable.find(u).value()).degree++;
+		}
+		edgeCount++;
 	} else if (isEdge(u,v)){
-		Vertex v = vertexTable.get(new VertexPair(u,v));
-		v.weight = weight;
-		v.partner.weight = weight;
+		Edge g = (Edge)edgeTable.find(new VertexPair(u,v)).value();
+		g.weight = weight;
+		g.partner.weight = weight;
 	}
   }
 
@@ -210,13 +216,14 @@ public class WUGraph implements Edge, Vertex{
    */
   public void removeEdge(Object u, Object v){
 	if(isVertex(u) && isVertex(v) && isEdge(u, v)){
-		VertexPair pair = new VertexPair(vertexTable.get(u), vertexTable.get(v));
-		Edge edge = (Edge) edgeTable.get(pair);
+		VertexPair pair = new VertexPair(vertexTable.find(u), vertexTable.find(v));
+		Edge edge = (Edge) edgeTable.find(pair).value();
 		edgeTable.remove(pair);
 		edge.removeSelf();
 		edge.partner.removeSelf();
-		u.degree--;
-		v.degree--;
+		((Vertex)vertexTable.find(u).value()).degree--;
+		((Vertex)vertexTable.find(v).value()).degree--;
+		edgeCount--;
 	}
   }
 
@@ -229,7 +236,7 @@ public class WUGraph implements Edge, Vertex{
    */
   public boolean isEdge(Object u, Object v){
 		VertexPair edge = new VertexPair(u, v);
-		return edgeTable.find(edge);
+		return edgeTable.find(edge)!=null;
 	}
 
   /**
@@ -252,7 +259,7 @@ public class WUGraph implements Edge, Vertex{
 		if (edgeEntry == null || this.isVertex(u) != true || this.isVertex(v) != true) {
 			return 0;
 		} else {
-			return edgeEntry.value.weight();
+			return ((Edge)edgeEntry.value()).weight();
 		}
 	}
 
