@@ -21,6 +21,9 @@ public class Kruskal {
 	Edge[] edges = new Edge[g.edgeCount()];
 	Neighbors neighbors;
 	Object[] vertices = g.getVertices();
+	Object[] object1Arr = new Object[g.edgeCount()];
+	Object[] object2Arr= new Object[g.edgeCount()];
+	int[] weightArr = new int[g.edgeCount()];
 	HashTableChained vertexTable = new HashTableChained();
 	WUGraph ans = new WUGraph();
 	int count = 0;
@@ -31,26 +34,32 @@ public class Kruskal {
 		vertexTable.insert(vertices[i], new Integer(i));
 		temp.addVertex(vertices[i]);
 	}
+	
+	//Acquire an array of all edges
 	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying Integer value
 		neighbors = g.getNeighbors(vertices[i]);
 		for(int j=0; j<neighbors.neighborList.length; j++){
 			if(!temp.isEdge(vertices[i], neighbors.neighborList[j])){
-				temp.addEdge(neighbors.neighborList[j], vertices[i], neighbors.weightList[j]);
-				edges[count] = new Edge( neighbors.weightList[j], neighbors.neighborList[j], vertices[i]);
+				temp.addEdge(vertices[i], neighbors.neighborList[j], neighbors.weightList[j]);
+				//edges[count] = new Edge( neighbors.weightList[j], neighbors.neighborList[j], vertices[i]);
+				object2Arr[count] = neighbors.neighborList[j];
+				object1Arr[count] = vertices[i];
+				weightArr[count] = neighbors.weightList[j];
 				count++;
 			}
 		}
 	}
 
-	
+	//apply Kruskal's algorithm
 	count = 0;
-	quicksort(edges);
+	//quicksort(edges);
+	quicksort(weightArr, object1Arr, object2Arr);
 	DisjointSets ds = new DisjointSets(vertices.length);//vertex in vertexTable which maps to i corresponds to element i of ds
 	while(ans.edgeCount() < vertices.length-1 && ans.edgeCount() < edges.length ){
-		int locA = locationOf(edges[count].object1(),vertexTable);
-		int locB = locationOf(edges[count].object2(),vertexTable);
+		int locA = locationOf(object1Arr[count],vertexTable);
+		int locB = locationOf(object2Arr[count],vertexTable);
 		if(ds.find(locA) != ds.find(locB)){
-			ans.copyEdge(edges[count]);
+			ans.addEdge(object1Arr[count], object2Arr[count], weightArr[count]);
 			ds.union(ds.find(locA),ds.find(locB));
 		}
 		count++;
@@ -75,8 +84,8 @@ public class Kruskal {
    *  Quicksort algorithm.
    *  @param a an array of Edge items.
    **/
-  public static void quicksort(Edge[] a) {
-    quicksort(a, 0, a.length - 1);
+  public static void quicksort(int[] a, Object[] b, Object[] c) {
+    quicksort(a, 0, a.length - 1 , b, c);
   }
 
   /**
@@ -85,10 +94,16 @@ public class Kruskal {
    *  @param index1 the index of the first Edge to be swapped.
    *  @param index2 the index of the second Edge to be swapped.
    **/
-  public static void swapReferences(Edge[] a, int index1, int index2) {
-    Edge tmp = a[index1];
+  public static void swapReferences(int[] a, Object[] b, Object[] c, int index1, int index2) {
+    Object tmp = b[index1];
+    b[index1] = b[index2];
+    b[index2] = tmp;
+	tmp = c[index1];
+    c[index1] = c[index2];
+    c[index2] = tmp;
+	int temp = a[index1];
     a[index1] = a[index2];
-    a[index2] = tmp;
+    a[index2] = temp;
   }
 
   /**
@@ -96,37 +111,37 @@ public class Kruskal {
    *  @param lo0     left boundary of array partition
    *  @param hi0     right boundary of array partition
    **/
-   public static void quicksort(Edge a[], int lo0, int hi0) {
+   public static void quicksort(int a[], int lo0, int hi0, Object[] b, Object[] c) {
      int lo = lo0;
      int hi = hi0;
      int mid;
 
      if (hi0 > lo0) {
 
-       swapReferences(a, lo0, (lo0 + hi0)/2);
-       mid = a[(lo0 + hi0) / 2].weight();
+       swapReferences(a, b, c, lo0, (lo0 + hi0)/2);
+       mid = a[(lo0 + hi0) / 2];
 
        while (lo <= hi) {
-         while((lo < hi0) && (a[lo].weight() < mid)) {
+         while((lo < hi0) && (a[lo] < mid)) {
            lo++;
          }
 
-         while((hi > lo0) && (a[hi].weight() > mid)) {
+         while((hi > lo0) && (a[hi] > mid)) {
            hi--;
          }
          if (lo <= hi) {
-           swapReferences(a, lo, hi);
+           swapReferences(a, b, c, lo, hi);
            lo++;
            hi--;
          }
        }
 
        if (lo0 < hi) {
-         quicksort(a, lo0, hi);
+         quicksort(a, lo0, hi, b, c);
        }
 
        if (lo < hi0) {
-         quicksort(a, lo, hi0);
+         quicksort(a, lo, hi0, b, c);
        }
      }
    }
