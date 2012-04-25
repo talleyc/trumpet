@@ -3,6 +3,7 @@
 import java.util.Hashtable;
 import graph.*;
 import set.*;
+import dict.*;
 
 /**
  * The Kruskal class contains the method minSpanTree(), which implements
@@ -18,16 +19,18 @@ public class Kruskal {
   public static WUGraph minSpanTree(WUGraph g){
 	Edge[] edges = g.getEdges();
 	Object[] vertices = g.getVertices();
+	HashTableChained vertexTable = new HashTableChained(2*vertices.length);
 	WUGraph ans = new WUGraph();
 	int count = 0;
 	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans
 		ans.addVertex(vertices[i]);
+		vertexTable.insert(vertices[i], new Integer(i));
 	}
 	quicksort(edges);
-	DisjointSets ds = new DisjointSets(vertices.length);//index i of vertices array maps to index i of ds
+	DisjointSets ds = new DisjointSets(vertices.length);//vertex in vertexTable which maps to i corresponds to element i of ds
 	while(ans.edgeCount() < vertices.length-1 && ans.edgeCount() < edges.length ){
-		int locA = locationOf(edges[count].object1(),vertices);
-		int locB = locationOf(edges[count].object2(),vertices);
+		int locA = locationOf(edges[count].object1(),vertexTable);
+		int locB = locationOf(edges[count].object2(),vertexTable);
 		if(ds.find(locA) != ds.find(locB)){
 			ans.copyEdge(edges[count]);
 			ds.union(ds.find(locA),ds.find(locB));
@@ -37,12 +40,8 @@ public class Kruskal {
 	return ans;
   }
   
-  public static int locationOf(Object a, Object[] b){
-	for(int i=0; i<b.length; i++){
-		if(b[i] == a){
-			return i;
-		}
-	} return -1; //signifies error
+  public static int locationOf(Object a, HashTableChained b){
+	return ((Integer)b.find(a).value()).intValue();
   }
  
   
