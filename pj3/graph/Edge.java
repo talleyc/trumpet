@@ -55,6 +55,14 @@ public class Edge{
 		return vertices;
 	}
 	
+	public Object object1(){
+		return vertices.object1;
+	}
+	
+	public Object object2(){
+		return vertices.object2;
+	}
+	
 	public Edge partner(){
 		return partner;
 	}

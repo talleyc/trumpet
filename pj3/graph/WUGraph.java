@@ -223,6 +223,10 @@ public class WUGraph {
 		g.partner.weight = weight;
 	}
   }
+  
+  public void copyEdge(Edge a){
+	this.addEdge(a.object1(), a.object2(), a.weight());
+  }
 
   /**
    * removeEdge() removes an edge (u, v) from the graph.  If either of the
@@ -283,6 +287,16 @@ public class WUGraph {
 		} else {
 			return ((Edge)edgeEntry.value()).weight();
 		}
+	}
+	
+	
+	public Edge[] getEdges(){
+		Edge[] ans = new Edge[edgeCount];
+		Object[] a = edgeTable.getEntries();
+		for(int i=0; i<edgeCount; i++){
+			ans[i] = (Edge)((Entry)a[i]).value();
+		}
+		return ans;
 	}
 
 }

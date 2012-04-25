@@ -268,4 +268,25 @@ public class HashTableChained implements Dictionary {
 		return table.length;
 	}
 	
+	public Object[] getEntries(){
+		ListNode traverser = null;
+		Object[] entries = new Object[size];
+		int j=0;
+		try{
+			for(int i=0; i<buckets; i++){
+				if(table[i]!=null){
+					traverser = table[i].front();
+					while(traverser != table[i].head()){
+						entries[j] = traverser.item();
+						traverser = traverser.next();
+						j++;
+					}
+				}
+			}
+		} catch(InvalidNodeException e){
+			System.err.print(e);
+		}
+		return entries;
+	}
+	
 }
