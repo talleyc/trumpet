@@ -106,7 +106,12 @@ public class WUGraph {
 			oldVx.next = null;
 			oldVx.prev = null;
 			while (currEdge.vertices() != null) {
-				currEdge.partner().removeSelf();
+				if(currEdge.partner() != currEdge){
+					currEdge.partner().removeSelf();
+				}
+				currEdge.removeSelf();
+				edgeTable.remove(currEdge.vertices);
+				edgeCount--;
 				((Vertex)(vertexTable.find(currEdge.vertices.object2).value())).degree--;
 			}
 			vertexTable.remove(vertex);
@@ -186,7 +191,7 @@ public class WUGraph {
    * Running time:  O(1).
    */
   public void addEdge(Object u, Object v, int weight){
-	if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
+	if(isVertex(u) && isVertex(v) && !isEdge(u, v) && vertexTable.find(u) != vertexTable.find(v)){
 		Edge first = new Edge(weight, u, v);
 		Edge second = new Edge(weight, v, u);
 		first.partner = second;
@@ -199,7 +204,16 @@ public class WUGraph {
 			((Vertex)vertexTable.find(u).value()).degree++;
 		}
 		edgeCount++;
-	} else if (isEdge(u,v)){
+	} else if(isVertex(u) && isVertex(v) && !isEdge(u, v)){
+		Edge first = new Edge(weight, u, v);
+		first.partner = first;
+		((Vertex) vertexTable.find(u).value()).edges().insertFront(first);
+		edgeTable.insert(new VertexPair(u, v), first);
+		((Vertex)vertexTable.find(v).value()).degree++;
+		edgeCount++;
+	
+	
+	}else if (isEdge(u,v)){
 		Edge g = (Edge)edgeTable.find(new VertexPair(u,v)).value();
 		g.weight = weight;
 		g.partner.weight = weight;
@@ -216,14 +230,18 @@ public class WUGraph {
    */
   public void removeEdge(Object u, Object v){
 	if(isVertex(u) && isVertex(v) && isEdge(u, v)){
-		VertexPair pair = new VertexPair(vertexTable.find(u), vertexTable.find(v));
-		Edge edge = (Edge) edgeTable.find(pair).value();
-		edgeTable.remove(pair);
-		edge.removeSelf();
-		edge.partner.removeSelf();
-		((Vertex)vertexTable.find(u).value()).degree--;
-		((Vertex)vertexTable.find(v).value()).degree--;
-		edgeCount--;
+		VertexPair pair = new VertexPair(u, v);
+		if(edgeTable.find(pair) != null){
+			Edge edge = (Edge) edgeTable.find(pair).value();
+			edgeTable.remove(pair);
+			edge.removeSelf();
+			edge.partner.removeSelf();
+			((Vertex)vertexTable.find(u).value()).degree--;
+			if(vertexTable.find(v).value() != vertexTable.find(u).value()) {
+				((Vertex)vertexTable.find(v).value()).degree--;
+			}
+			edgeCount--;
+		}
 	}
   }
 
