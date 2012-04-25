@@ -6,6 +6,14 @@
 		This allowed constant-time access to the appropriate entry in the disjoint sets object, regardless of what type
 		of object the user wants to store in the graph's vertices.
 		
+	In order to acquire a list of all edges, we start with an empty graph. Then, we iterate through the vertices of the
+		graph being evaluated, and we find all of the neighbors of each of these vertices. This takes O(V + E) time, since
+		the sum of the degrees of all vertices is equal to or less than two times the number of edges in the graph, and we
+		are iterating over the degrees of all vertices, and we are also iterating over all vertices. Each time that we
+		find a pair of neighbors (i.e. an edge) which has not yet been placed into our new, originally empty graph, we add
+		that edge to our edge array. Then, we sort the array, and then we apply Kruskal's algorithm in a very straightforward
+		manner.
+		
 	We used quicksort to sort the vertices in O( |E|log(|E|) ) time, and because of the use of a hash table, the whole algorithm
 		runs in O( |E|log(|E|) + V ) time, since creating a list of all edges takes O(V) time.
 		

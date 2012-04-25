@@ -17,15 +17,33 @@ public class Kruskal {
    * of the WUGraph g.  The original WUGraph g is NOT changed.
    */
   public static WUGraph minSpanTree(WUGraph g){
-	Edge[] edges = g.getEdges();
+	WUGraph temp = new WUGraph();	//the purpose of the temp graph is to count all edges
+	Edge[] edges = new Edge[g.edgeCount()];
+	Neighbors neighbors;
 	Object[] vertices = g.getVertices();
-	HashTableChained vertexTable = new HashTableChained(2*vertices.length);
+	HashTableChained vertexTable = new HashTableChained();
 	WUGraph ans = new WUGraph();
 	int count = 0;
-	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying value
+	
+	//put all vertices in the ans and temp graphs
+	for(int i=0; i<vertices.length; i++){
 		ans.addVertex(vertices[i]);
 		vertexTable.insert(vertices[i], new Integer(i));
+		temp.addVertex(vertices[i]);
 	}
+	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying Integer value
+		neighbors = g.getNeighbors(vertices[i]);
+		for(int j=0; j<neighbors.neighborList.length; j++){
+			if(!temp.isEdge(vertices[i], neighbors.neighborList[j])){
+				temp.addEdge(neighbors.neighborList[j], vertices[i], neighbors.weightList[j]);
+				edges[count] = new Edge( neighbors.weightList[j], neighbors.neighborList[j], vertices[i]);
+				count++;
+			}
+		}
+	}
+
+	
+	count = 0;
 	quicksort(edges);
 	DisjointSets ds = new DisjointSets(vertices.length);//vertex in vertexTable which maps to i corresponds to element i of ds
 	while(ans.edgeCount() < vertices.length-1 && ans.edgeCount() < edges.length ){
