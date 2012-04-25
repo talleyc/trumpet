@@ -1,5 +1,10 @@
 package graph;
 
+
+/**
+*  Similar to an Edge, a Vertex is a node in a doubly-linked list
+*  with a sentinal node. The sentinal node is kept by the WUGraph object
+*/
 public class Vertex extends Object{
         
         protected Object item;
@@ -8,7 +13,9 @@ public class Vertex extends Object{
 		protected int degree;
 		protected Edge edges;
 		
-        //Empty constructor for a Vertex
+	/**
+	*  Constructs an empty Vertex.
+	*/
         public Vertex() {
                 item = null;
 				prev = this;
@@ -17,32 +24,38 @@ public class Vertex extends Object{
 				edges = new Edge();
         }
        
-		 //Return the current vertex
-        public Object vertex() {
-                return item;  
-        }
-	
-        //Return the next vertex
+
+	/**
+	*  @return the next vertex in this linked list of vertices.
+	*/
         public Vertex next() {
                 return next;
         }
         
-        //Return the previous vertex
+	/**
+	*  @return the previous vertex in this linked list of vertices.
+	*/
         public Vertex prev() {
                 return prev;
         }    
         
-		//Return the degree
+	/**
+	*  @return the degree, or number of unique edges touching this node
+	*/
 		public int degree() {
 				return degree;
 		}
 		
-		//Return the list of edges
+	/**
+	*  @return the sentinal node Edge in this vertex's linked list of edges.
+	*/
 		public Edge edges() {
 				return edges;
 		}
 		
-		//Return the 
+	/**
+	*  @return the item stored by this vertex.
+	*/
 		public Object item(){
 			return item;
 		}

@@ -22,7 +22,7 @@ public class Kruskal {
 	HashTableChained vertexTable = new HashTableChained(2*vertices.length);
 	WUGraph ans = new WUGraph();
 	int count = 0;
-	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans
+	for(int i=0; i<vertices.length; i++){ //add all vertices from g to ans, and hash them with an identifying value
 		ans.addVertex(vertices[i]);
 		vertexTable.insert(vertices[i], new Integer(i));
 	}
@@ -40,24 +40,32 @@ public class Kruskal {
 	return ans;
   }
   
-  public static int locationOf(Object a, HashTableChained b){
-	return ((Integer)b.find(a).value()).intValue();
+  /**
+   * Returns the index of the disjoint sets object that the given object corresponds to
+   * @param key the object whose index is being found
+   * @param table the hash table which contains the necessary key-value pairs
+   *      where the keys are the objects and the values are their corresponding indices in the
+   *      disjoint sets object.
+   * @return the index of the disjoint sets data structure that corresponds to @param key
+   */
+  public static int locationOf(Object key, HashTableChained table){
+	return ((Integer)table.find(key).value()).intValue();
   }
  
   
   /**
    *  Quicksort algorithm.
-   *  @param a an array of int items.
+   *  @param a an array of Edge items.
    **/
   public static void quicksort(Edge[] a) {
     quicksort(a, 0, a.length - 1);
   }
 
   /**
-   *  Method to swap two ints in an array.
-   *  @param a an array of ints.
-   *  @param index1 the index of the first int to be swapped.
-   *  @param index2 the index of the second int to be swapped.
+   *  Method to swap two Edges in an array.
+   *  @param a an array of Edges.
+   *  @param index1 the index of the first Edge to be swapped.
+   *  @param index2 the index of the second Edge to be swapped.
    **/
   public static void swapReferences(Edge[] a, int index1, int index2) {
     Edge tmp = a[index1];
@@ -66,16 +74,7 @@ public class Kruskal {
   }
 
   /**
-   *  This is a generic version of C.A.R Hoare's Quick Sort algorithm.  This
-   *  will handle arrays that are already sorted, and arrays with duplicate
-   *  keys.
-   *
-   *  If you think of an array as going from the lowest index on the left to
-   *  the highest index on the right then the parameters to this function are
-   *  lowest index or left and highest index or right.  The first time you call
-   *  this function it will be with the parameters 0, a.length - 1.
-   *
-   *  @param a       an integer array
+   *  @param a       an Edge array
    *  @param lo0     left boundary of array partition
    *  @param hi0     right boundary of array partition
    **/

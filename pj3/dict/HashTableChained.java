@@ -63,6 +63,12 @@ public class HashTableChained implements Dictionary {
 		}
 	}
 	
+	
+	/**
+	*  returns true iff @param num is prime, false otherwise
+	*  @param num the number whose primality is to be tested
+	*  @return true if @param is prime, false otherwise
+	**/
 	private static boolean isPrime(int num) {
 		boolean prime = true;
 		for (int i = 3; i <= Math.sqrt(num); i += 2)
@@ -260,14 +266,19 @@ public class HashTableChained implements Dictionary {
 		initBuckets();
 	}
 
+	
+	/**
+	*  Returns the number of buckets in this hash table
+	*  @return the number of buckets
+	*/
 	public int buckets(){
 		return buckets;
 	}
 	
-	public int tableLen(){
-		return table.length;
-	}
-	
+	/**
+	*  Returns a list of all entries in this table
+	*  @return an array containing all entries in this table
+	*/
 	public Object[] getEntries(){
 		ListNode traverser = null;
 		Object[] entries = new Object[size];

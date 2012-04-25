@@ -64,7 +64,7 @@ public class WUGraph {
 		Object[] vxList = new Object[vertexCount];
 		Vertex currVx = vList.next;
 		for (int i = 0; i < vertexCount; i++) {
-			vxList[i] = currVx.vertex();
+			vxList[i] = currVx.item();
 			currVx = currVx.next;
 		}
 		return vxList;
@@ -224,6 +224,13 @@ public class WUGraph {
 	}
   }
   
+  /**
+   * copyEdge() is similar to addEdge(), but it takes an edge which is not yet in this
+   * graph and makes an identical edge in this graph.
+   * @param a the edge to be copied into this graph
+   *
+   * Running time:  O(1).
+   */
   public void copyEdge(Edge a){
 	this.addEdge(a.object1(), a.object2(), a.weight());
   }
@@ -289,7 +296,14 @@ public class WUGraph {
 		}
 	}
 	
-	
+/**
+   * getEdges() returns an array containing all the objects that serve
+   * as edges of the graph.  The array's length is exactly equal to the
+   * number of edges.  If the graph has no edges, the array has length
+   * zero.
+   * Running time:  O(E).
+   * @return an array containing all edges in this graph
+   */
 	public Edge[] getEdges(){
 		Edge[] ans = new Edge[edgeCount];
 		Object[] a = edgeTable.getEntries();

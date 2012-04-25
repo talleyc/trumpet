@@ -1,1 +1,25 @@
-stuff is here
+=====================
+*Kruskal's Algorithm*
+=====================
+	We used a hash table to store all of the vertices in the graph. In the hash table, each vertex was the key, and 
+		the value was an Integer which allowed us to relate that vertex to a location in the disjoint sets object.
+		This allowed constant-time access to the appropriate entry in the disjoint sets object, regardless of what type
+		of object the user wants to store in the graph's vertices.
+		
+	We used quicksort to sort the vertices in O( |E|log(|E|) ) time, and because of the use of a hash table, the whole algorithm
+		runs in O( |E|log(|E|) + V ) time, since creating a list of all edges takes O(V) time.
+		
+
+====================
+ *EDGES & VERTICES*
+====================
+	Edges and Vertices are represented as nodes in a linked list of Edges. This is a doubly-linked list with a Sentinel node.
+	For the list of vertices, the sentinel node is held in the WUGraph object.
+	
+	For edges, each vertex contains a linked list of all edges which connect it to any other vertex, or itself. Two edges
+	which connect the same 2 nodes are known as "partners" and they have references to each other. Every edge has exactly
+	one partner.
+	
+	Vertices and edges each have their own hash table, which are stored in the WUGraph object. Each pair of "partner" edges
+	is only hashed once in the edge hash table. When an edge is deleted, it is removed from the hash table, then it removes
+	itself from its linked list, then its partner removes itself from its linked list. Each edge has a weight.
