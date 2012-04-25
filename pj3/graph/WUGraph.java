@@ -11,12 +11,11 @@ import dict.*;
 
 public class WUGraph implements Edge, Vertex{
 
-	HashTableChained vertexTable;
-	HashTableChained edgeTable;
-	Vertex vList;
-	int edgeCount;
-	int vertexCount;
-
+	protected HashTableChained vertexTable;
+	protected HashTableChained edgeTable;
+	protected Vertex vList;
+	protected int edgeCount;
+	protected int vertexCount;
 
   /**
    * WUGraph() constructs a graph having no vertices or edges.
@@ -29,7 +28,7 @@ public class WUGraph implements Edge, Vertex{
 		vList = new Vertex();
 		edgeCount = 0;
 		vertexCount = 0;
-  }
+	}
 
   /**
    * vertexCount() returns the number of vertices in the graph.
@@ -63,10 +62,10 @@ public class WUGraph implements Edge, Vertex{
    */
   public Object[] getVertices(){
 		Object[] vxList = new Object[vertexCount];
-		Vertex currVx = vList.next;
+		Vertex currVx = vList.nextVertex();
 		for (int i = 0; i < vertexCount; i++) {
-			Object[i] = currVx.item;
-			currVx = currVx.next;
+			Object[i] = currVx.getVertex();
+			currVx = currVx.nextVertex();
 		}
 		return vxList;
 	}
@@ -79,12 +78,25 @@ public class WUGraph implements Edge, Vertex{
    * Running time:  O(1).
    */
   public void addVertex(Object vertex){
+		if (!isVertex(vertex)) {
+			Vertex newVx = new Vertex();
+			newVx.item = vertex;
+			newVx.prev = vList.prev;
+			vList.prev.next = newVx;
+			newVx.next = vList;
+			vList.prev = newVx;
+			vertextable.insert(vertex, newVx);
+		}
+		else return;
+
 	if (isVertex(vertex)) {
 		Vertex newvx = new Vertex();
 		newvx.item = vertex;
 		newvx.prev = this;
 		this.next = newvx;	
+
 	}
+	else return;
   }
 
   /**
@@ -97,10 +109,16 @@ public class WUGraph implements Edge, Vertex{
   public void removeVertex(Object vertex){
 	if (isVertex(vertex))
 	{
-		Vertex oldvx = vertex;
-		oldvx.next.prev = oldvx.prev;
-		oldvx.prev.next = oldvx.next;
-	}	
+		if (vertexTable.find(vertex) != null) 
+		{
+			Vertex oldVx = vertex;
+			oldVx.next.prev = oldVx.prev;
+			oldVx.prev.next = oldVx.next;
+			vertextable.remove(vertex);
+		}
+		else return;
+	}
+	else return;
   }
  
  
@@ -121,6 +139,7 @@ public class WUGraph implements Edge, Vertex{
    *
    * Running time:  O(1).
    */
+
   public int degree(Object vertex){
 		Entry vxEntry = vertexTable.find(vertex);
 		if (vxEntry == null || this.isVertex(vertex) != true) {
@@ -130,6 +149,11 @@ public class WUGraph implements Edge, Vertex{
 		}
 	}
 	
+
+  public int degree(Object vertex) {
+			return vertex.degree;
+	}	
+
   /**
    * getNeighbors() returns a new Neighbors object referencing two arrays.  The
    * Neighbors.neighborList array contains each object that is connected to the
