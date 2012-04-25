@@ -19,20 +19,11 @@ public class Edge{
 	  * @param parentGraph the graph which contains this edge and these objects
 	 */
 	public Edge(int w, Vertex a, Vertex b){
-		if(!parentGraph.isEdge(a.getItem(), b.getItem())){
-			weight = w;
-			vertices = new VertexPair(a.getItem(), b.getItem());
-			partner = null;
-		}
+		weight = w;
+		vertices = new VertexPair(a.getItem(), b.getItem());
+		partner = null;
 	}
 	
-<<<<<<< HEAD
-	public int getWeight(){
-		return weight;
-	}
-	
-	public VertexPair getVertices(){
-=======
 	public Edge(){
 		vertices = null;
 		next = null;
@@ -41,12 +32,11 @@ public class Edge{
 		weight = 0;
 	}
 	
-	public int weight(){
+	public int getWeight(){
 		return weight;
 	}
-	
-	public vertexPair vertices(){
->>>>>>> 0400c02ca1277a5134550bfc9d691d0ba0401aee
+		
+	public vertexPair getVertices(){
 		return vertices;
 	}
 	
@@ -57,5 +47,7 @@ public class Edge{
 	public removeSelf(){
 		next.prev = prev;
 		prev.next = next;
+		prev = null;
+		next = null;
 	}
 }

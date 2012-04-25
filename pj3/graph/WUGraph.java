@@ -179,7 +179,7 @@ public class WUGraph implements Edge, Vertex{
 		Vertex vxEntry = vertexTable.find(vertex).value;
 		Edge currEdge = vxEntry.getEdges().next;
 		for (int i = 0; i < vxEntry.getDegree(); i++) {
-			res.neighborList[i] = getVertices().object2;
+			res.neighborList[i] = currEdge.vertices().object2;
 			res.weightList[i] = getWeight();
 			currEdge = currEdge.next;
 		}
